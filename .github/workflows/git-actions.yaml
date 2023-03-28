@@ -46,13 +46,14 @@ jobs:
         run: |-
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
-        # Build the Docker image
+      # Build the Docker image
       - name: Build
         run: |-
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
+            .
 
       - name: Publish Docker Image to GCR
         run: |-
