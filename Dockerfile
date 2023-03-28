@@ -1,8 +1,8 @@
 FROM python:3.8-slim
+ARG TEST1
+ENV TEST2=$TEST1
+RUN echo "The ENV variable value is $TEST2"
 ENV PYTHONUNBUFFERED True
-ARG ACCESS_TOKEN
-ENV TOKEN=$ACCESS_TOKEN
-RUN echo "The ENV variable value is $TOKEN"
 WORKDIR /app
 COPY *.txt .
 RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
