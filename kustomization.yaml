@@ -19,4 +19,3 @@ resources:
 - service.yaml
 - managed-cert.yaml
 - managed-cert-ingress.yaml
-- mc-service.yaml
