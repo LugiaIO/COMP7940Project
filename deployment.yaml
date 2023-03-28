@@ -17,10 +17,10 @@ spec:
       - name: github-actions-gke
         image: gcr.io/PROJECT_ID/IMAGE:TAG
         ports:
-        - containerPort: 8080
+        - containerPort: 8443
         env:
           - name: PORT
-            value: "8080"
+            value: "8443"
         resources:
           requests:
             cpu: 100m
