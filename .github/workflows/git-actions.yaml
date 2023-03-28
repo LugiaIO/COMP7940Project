@@ -11,19 +11,26 @@ env:
   GKE_ZONE: asia-east1-b
   DEPLOYMENT_NAME: github-actions-gke
   IMAGE: github-actions-gke-image
-  TAG: 1.0.0
+  TAG: 1.1.4
 
 jobs:
   setup-build-publish-deploy:
     name: Setup Build Publish Deploy
     runs-on: ubuntu-latest
 
-    steps:
-
-
+    steps:         
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+      
+      - name: Run a test
+        run: |
+         gcloud components list
+         echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+         curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+         sudo apt update
+         sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+         echo "##vso[task.setvariable variable=USE_GKE_GCLOUD_AUTH_PLUGIN]True"
+      
       - name: Setup Google Cloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@0.1.3
         env:
