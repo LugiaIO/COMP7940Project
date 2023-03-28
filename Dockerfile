@@ -1,5 +1,6 @@
 FROM python:3.8-slim
 ENV PYTHONUNBUFFERED True
+RUN echo "The ENV variable value is $TOKEN"
 WORKDIR /app
 COPY *.txt .
 RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
