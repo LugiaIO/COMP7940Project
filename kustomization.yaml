@@ -17,3 +17,5 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - service.yaml
+- managed-cert.yaml
+- managed-cert-ingress.yaml
