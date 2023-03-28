@@ -51,7 +51,7 @@ jobs:
         run: |-
           docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:$TAG" .
 
-      - name: Publish Docker Image to GCR
+      - name: Publish Docker Image to GCRR
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE:$TAG"
 
