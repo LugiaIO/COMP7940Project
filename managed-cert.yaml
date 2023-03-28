@@ -5,4 +5,3 @@ metadata:
 spec:
   domains:
     - gke.hkg.im
-    - cloudca.hkg.im
