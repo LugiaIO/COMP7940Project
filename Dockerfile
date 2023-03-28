@@ -1,5 +1,7 @@
 FROM python:3.8-slim
 ENV PYTHONUNBUFFERED True
+ARG ACCESS_TOKEN
+ENV TOKEN=$ACCESS_TOKEN
 RUN echo "The ENV variable value is $TOKEN"
 WORKDIR /app
 COPY *.txt .
