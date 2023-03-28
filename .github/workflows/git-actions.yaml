@@ -31,7 +31,7 @@ jobs:
           echo "##vso[task.setvariable variable=USE_GKE_GCLOUD_AUTH_PLUGIN]True"
 
       - name: Setup Google Cloud CLI
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
+        uses: google-github-actions/setup-gcloud@v1
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         with:
