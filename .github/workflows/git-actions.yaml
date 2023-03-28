@@ -10,7 +10,7 @@ env:
   GKE_CLUSTER: cluster-1
   GKE_ZONE: asia-east1-b
   DEPLOYMENT_NAME: github-actions-gke
-  IMAGE: cloud-bot-g11
+  IMAGE: github-actions-gke-image
   TAG: 1.1.4
 
 jobs:
@@ -20,9 +20,9 @@ jobs:
 
     steps:         
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
-      - name: Run a test
+      - name: Install google-cloud-sdk-gke-gcloud-auth-plugin
         run: |
          gcloud components list
          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
