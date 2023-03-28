@@ -23,7 +23,7 @@ def echo(update: Update, context: CallbackContext) -> None:
 def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Helping you helping you.")
 
-#bot = Bot(token=os.environ.get('TAG'))
+#bot = Bot(token=os.environ.get('TAG')
 bot = Bot(token=os.environ["TOKEN"])
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
