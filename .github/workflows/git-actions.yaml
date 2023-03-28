@@ -10,7 +10,7 @@ env:
   GKE_CLUSTER: cluster-1
   GKE_ZONE: asia-east1-b
   DEPLOYMENT_NAME: github-actions-gke
-  IMAGE: github-actions-gke-image
+  IMAGE: cloud-bot-g11
   TAG: 1.1.4
 
 jobs:
