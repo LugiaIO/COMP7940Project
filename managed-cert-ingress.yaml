@@ -11,4 +11,4 @@ spec:
     service:
       name: service
       port:
-        number: 8443
+        number: 80
