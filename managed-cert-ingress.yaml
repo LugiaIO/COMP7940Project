@@ -9,6 +9,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: service
+      name: github-actions-gke
       port:
         number: 80
