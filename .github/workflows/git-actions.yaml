@@ -11,28 +11,27 @@ env:
   GKE_ZONE: asia-east1-b
   DEPLOYMENT_NAME: github-actions-gke
   IMAGE: github-actions-gke-image
-  TAG: 1.1.4
 
 jobs:
   setup-build-publish-deploy:
     name: Setup Build Publish Deploy
     runs-on: ubuntu-latest
 
-    steps:         
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      
+
       - name: Install google-cloud-sdk-gke-gcloud-auth-plugin
         run: |
-         gcloud components list
-         echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-         curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-         sudo apt update
-         sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
-         echo "##vso[task.setvariable variable=USE_GKE_GCLOUD_AUTH_PLUGIN]True"
-      
+          gcloud components list
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+          sudo apt update
+          sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+          echo "##vso[task.setvariable variable=USE_GKE_GCLOUD_AUTH_PLUGIN]True"
+
       - name: Setup Google Cloud CLI
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         with:
@@ -47,13 +46,17 @@ jobs:
         run: |-
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
-      - name: Build Docker Image
+        # Build the Docker image
+      - name: Build
         run: |-
-          docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:$TAG" .
+          docker build \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
 
-      - name: Publish Docker Image to GCRR
+      - name: Publish Docker Image to GCR
         run: |-
-          docker push "gcr.io/$PROJECT_ID/$IMAGE:$TAG"
+          docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
       - name: Set up Kustomize
         run: |-
