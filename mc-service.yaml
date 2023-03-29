@@ -4,7 +4,7 @@ metadata:
   name: mc-service
 spec:
   selector:
-    app: cloud-bot-kde-v4
+    app: cloud-bot-kde-v5
   type: NodePort
   ports:
     - protocol: TCP
