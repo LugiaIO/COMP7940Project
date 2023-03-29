@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-bot-kde-v4
+  name: mc-service
 spec:
   selector:
     app: cloud-bot-kde-v4
