@@ -1,6 +1,6 @@
 import os
 import http
-
+import config
 from flask import Flask, request
 from werkzeug.wrappers import Response
 
@@ -23,7 +23,8 @@ def echo(update: Update, context: CallbackContext) -> None:
 def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Helping you helping you.")
 
-#bot = Bot(token=os.environ.get('TAG')
+
+# bot = Bot(token=os.environ.get('TAG')
 bot = Bot(token=os.environ["TOKEN"])
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
@@ -31,8 +32,11 @@ dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", help_command))
 
 
-@app.post("/")
+@app.route("/", methods=["POST"])
 def index() -> Response:
     dispatcher.process_update(Update.de_json(request.get_json(force=True), bot))
 
     return "", http.HTTPStatus.NO_CONTENT
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=config.PORT, debug=config.DEBUG_MODE)
