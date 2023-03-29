@@ -11,4 +11,4 @@ spec:
     service:
       name: github-actions-gke
       port:
-        number: 8080
+        number: 80
