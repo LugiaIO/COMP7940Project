@@ -7,4 +7,5 @@ WORKDIR /app
 COPY *.txt .
 RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
 COPY . ./
-CMD ["gunicorn", "bot:app", "--config=config.py", "--worker-class=gevent", "--timeout=5"]
+CMD [ "python", "./bot.py"]
+#CMD ["gunicorn", "bot:app", "--config=config.py", "--worker-class=gevent", "--timeout=5"]
