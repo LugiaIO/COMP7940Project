@@ -18,4 +18,4 @@ resources:
 - deployment.yaml
 - managed-cert.yaml
 - service.yaml
-- managed-cert-ingress.yaml
+- managed-cert-ingress-cloud-bot.yaml
