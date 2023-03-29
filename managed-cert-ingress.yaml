@@ -4,12 +4,12 @@ metadata:
   name: managed-cert-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: 34.117.86.53
-    networking.gke.io/managed-certificates: managed-cert-cloud
+    networking.gke.io/managed-certificates: managed-cert-bot
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "false"
 spec:
   defaultBackend:
     service:
-      name: cloud-bot
+      name: cloud-bot-kde
       port:
         number: 80

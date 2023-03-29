@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-bot
+  name: cloud-bot-kde
 spec:
   selector:
-    app: cloud-bot
+    app: cloud-bot-kde
   type: NodePort
   ports:
     - protocol: TCP
