@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: managed-cert
+  name: github-actions-gke
 spec:
   domains:
-    - gke.hkg.im
+    - gcp.hkg.im
