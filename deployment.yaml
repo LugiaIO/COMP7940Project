@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-bot-kde-v3
+  name: cloud-bot-kde-v4
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud-bot-kde-v3
+      app: cloud-bot-kde-v4
   minReadySeconds: 5
   template:
     metadata:
       labels:
-        app: cloud-bot-kde-v3
+        app: cloud-bot-kde-v4
     spec:
       containers:
-      - name: cloud-bot-kde-v3
+      - name: cloud-bot-kde-v4
         image: gcr.io/PROJECT_ID/IMAGE:TAG
         ports:
         - containerPort: 8443
