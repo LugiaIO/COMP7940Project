@@ -7,8 +7,8 @@ on:
 
 env:
   PROJECT_ID: ${{secrets.GKE_PROJECT}}
-  GKE_CLUSTER: cluster-2
-  GKE_ZONE: asia-east2-b
+  GKE_CLUSTER: cluster-cloud
+  GKE_ZONE: us-east1-d
   DEPLOYMENT_NAME: cloud-bot-kde-v4
   IMAGE: github-actions-gke-image
 
@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install google-cloud-sdk-gke-gcloud-auth-plugin
         run: |
