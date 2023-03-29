@@ -4,4 +4,4 @@ metadata:
   name: managed-cert
 spec:
   domains:
-    - dn.hkg.im
+    - cl.hkg.im
