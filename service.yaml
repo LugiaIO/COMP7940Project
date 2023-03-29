@@ -7,5 +7,5 @@ spec:
     app: cloud-bot-kde-v1
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: 8080
+    - port: 8080
+      targetPort: 8443
