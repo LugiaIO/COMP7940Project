@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: github-actions-gke
+  name: cloud-bot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: github-actions-gke
+      app: cloud-bot
   minReadySeconds: 5
   template:
     metadata:
       labels:
-        app: github-actions-gke
+        app: cloud-bot
     spec:
       containers:
-      - name: github-actions-gke
+      - name: cloud-bot
         image: gcr.io/PROJECT_ID/IMAGE:TAG
         ports:
         - containerPort: 8080

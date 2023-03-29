@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: github-actions-gke
+  name: cloud-bot
 spec:
   selector:
-    app: github-actions-gke
+    app: cloud-bot
   type: NodePort
   ports:
     - protocol: TCP

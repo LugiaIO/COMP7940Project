@@ -9,7 +9,7 @@ env:
   PROJECT_ID: ${{secrets.GKE_PROJECT}}
   GKE_CLUSTER: cluster-1
   GKE_ZONE: asia-east1-b
-  DEPLOYMENT_NAME: github-actions-gke
+  DEPLOYMENT_NAME: cloud-bot
   IMAGE: github-actions-gke-image
 
 jobs:
