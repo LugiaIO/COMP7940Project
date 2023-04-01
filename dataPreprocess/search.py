@@ -9,9 +9,12 @@ cred = credentials.Certificate('certain-reducer-381500-firebase-adminsdk-yvaaz-7
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 
-with open('imdb_final.json', 'r') as f:
-  movies = json.load(f)
-  for movie in movies:
-    print(movie['Series_Title'])
-    doc_ref = firestore_client.collection("movies").document(movie['Series_Title'])
-    doc_ref.set(movie)
+# A reference to the laptops collection.
+coll_ref = firestore_client.collection("movies")
+
+# Create a query against the collection reference.
+query_ref = coll_ref.where("Series_Title_Index", "array_contains", "Book")
+
+# Print the documents returned from the query:
+for doc in query_ref.stream():
+    print(f"{doc.id} => {doc.to_dict()}")
