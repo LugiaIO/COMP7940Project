@@ -28,7 +28,7 @@ bot = Bot(token=os.environ["TOKEN"])
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", help_command))
-
+dispatcher.add_handler(CommandHandler("test", test_command))
 @app.post("/")
 def index() -> Response:
     dispatcher.process_update(
