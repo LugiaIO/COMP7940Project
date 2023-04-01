@@ -30,12 +30,12 @@ def helpCommand(update: Update, context: CallbackContext) -> None:
 def search(update: Update, context: CallbackContext) -> None:
     keyword_list = context.args
     for keyword in keyword_list:
-        
-        movie = randomMovie()
-        (detail, image_link) = output(movie)
-        update.message.bot.send_photo(
-            chat_id=update.effective_chat.id, photo=image_link, caption=detail
-        )
+        movie_list = search(keyword)
+        for movie in movie_list:
+            (detail, image_link) = output(movie)
+            update.message.bot.send_photo(
+                chat_id=update.effective_chat.id, photo=image_link, caption=detail
+            )
 
 def randomMovie(update: Update, context: CallbackContext) -> None:
     movie = randomMovie()
@@ -48,6 +48,7 @@ dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
 dispatcher.add_handler(CommandHandler("random_movie", randomMovie))
+dispatcher.add_handler(CommandHandler("search", search))
 
 
 @app.post("/")
