@@ -3,7 +3,7 @@ import http
 
 from flask import Flask, request
 from werkzeug.wrappers import Response
-from detail import output, The_Jungle_Book
+from detail import output
 from telegram import Bot, Update
 from telegram.ext import (
     Dispatcher,
