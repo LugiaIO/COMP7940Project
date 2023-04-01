@@ -3,35 +3,45 @@ import http
 
 from flask import Flask, request
 from werkzeug.wrappers import Response
-from detail import output,The_Jungle_Book
+from detail import output, The_Jungle_Book
 from telegram import Bot, Update
-from telegram.ext import Dispatcher, Filters, MessageHandler, CallbackContext, CommandHandler
+from telegram.ext import (
+    Dispatcher,
+    Filters,
+    MessageHandler,
+    CallbackContext,
+    CommandHandler,
+)
+
+from movie_function import randomMovie, search
 
 app = Flask(__name__)
 
-(detail, image_link) = output(The_Jungle_Book)
+bot = Bot(token=os.environ["TOKEN"])
 
 def echo(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(update.message.text)
 
+
 def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Helping you helping you.")
 
-def test_command(update: Update, context: CallbackContext) -> None:
-    update.message.bot(chat_id=update.effective_chat.id, photo=
-image_link, caption=detail)
 
-bot = Bot(token=os.environ["TOKEN"])
-
-
+def random_movie_command(update: Update, context: CallbackContext) -> None:
+    movie = randomMovie()
+    (detail, image_link) = output(movie)
+    update.message.bot.send_photo(
+        chat_id=update.effective_chat.id, photo=image_link, caption=detail
+    )
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", help_command))
-dispatcher.add_handler(CommandHandler("test", test_command))
+dispatcher.add_handler(CommandHandler("random_movie", random_movie_command))
+
+
 @app.post("/")
 def index() -> Response:
-    dispatcher.process_update(
-        Update.de_json(request.get_json(force=True), bot))
+    dispatcher.process_update(Update.de_json(request.get_json(force=True), bot))
 
     return "", http.HTTPStatus.NO_CONTENT
