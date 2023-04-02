@@ -42,7 +42,7 @@ def search(keyword):
 def read(movie_name):
     # Create a query against the collection reference.
     coll_ref = getReference("comment")
-    collections = coll_ref.document(movie_name).collection()
+    collections = coll_ref.document(movie_name).collections()
     comment_list = []
     for collection in collections:
         for doc in collection.stream():
