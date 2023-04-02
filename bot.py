@@ -44,26 +44,27 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
 
 def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     movie_name = context.args
-    movie_name = " ".join(movie_name)
-    print(movie_name)
-    print(str(type(movie_name))+"ssss"+movie_name)
-    reviews_list = read(movie_name)
-    print(reviews_list)
-    if len(reviews_list) != 0 and len(movie_name)!=0:
-        for review in reviews_list:
-            (output, username) = reviewOutput(review)
-            update.message.reply_text(output)
-            textToWav("en-GB-Neural2-B", output, movie_name, username)
-            update.message.bot.send_audio(
-                chat_id=update.effective_chat.id,
-                audio=open(f"{movie_name}_{username}.wav", "rb"),
-            )
-            os.remove(f"{movie_name}_{username}.wav")
+    if len(movie_name) == 0:
+        update.message.reply_text("Please input moive name! Usage: /read_reviews <moive name>")
     else:
-        update.message.reply_text("No review for this movie.")
-    
-    if movie_name == '':
-        update.message.reply_text("Please input movie name!")
+        movie_name = " ".join(movie_name)
+        print(movie_name)
+        print(str(type(movie_name))+"ssss"+movie_name)
+        reviews_list = read(movie_name)
+        print(reviews_list)
+        if len(reviews_list) != 0 and len(movie_name)!=0:
+            for review in reviews_list:
+                (output, username) = reviewOutput(review)
+                update.message.reply_text(output)
+                textToWav("en-GB-Neural2-B", output, movie_name, username)
+                update.message.bot.send_audio(
+                    chat_id=update.effective_chat.id,
+                    audio=open(f"{movie_name}_{username}.wav", "rb"),
+                )
+                os.remove(f"{movie_name}_{username}.wav")
+        else:
+            update.message.reply_text("No review for this movie.")
+        
 
 
 
