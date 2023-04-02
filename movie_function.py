@@ -7,7 +7,7 @@ import json
 
 # Fetch the service account key JSON file contents
 json_object = json.loads(os.environ["DB_KEY"])
-cred = credentials.Certificate(json_object)
+cred = credentials.Certificate("json_object")
 # Initialize the app with a service account, granting admin privileges
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
@@ -41,12 +41,11 @@ def search(keyword):
 
 def read(movie_name):
     # Create a query against the collection reference.
-    coll_ref = getReference("movie_reviews")
+    coll_ref = getReference("movies_reviews")
     collections = coll_ref.document(movie_name).collections()
     reviews_list = []
     for collection in collections:
         for doc in collection.stream():
             reviews_list.append(doc.to_dict())
-
+    print(reviews_list)
     return reviews_list
-
