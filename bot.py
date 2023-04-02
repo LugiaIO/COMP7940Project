@@ -49,7 +49,7 @@ def readCommentCommand(update: Update, context: CallbackContext) -> None:
     if len(comment_list) != 0:
         for comment in comment_list:
             (output, username) = commentOutput(comment)
-            update.message.reply_text()
+            update.message.reply_text(output)
             textToWav("en-GB-Neural2-B",output)
             update.message.bot.send_audio(chat_id=update.effective_chat.id, audio=open(f'{movie_name}_{username}.wav', 'rb'))
             os.remove(f'{movie_name}_{username}.wav')
