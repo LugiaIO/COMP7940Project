@@ -4,10 +4,11 @@ from google.oauth2 import service_account
 import os
 import json
 
-# Fetch the service account key JSON file contents
-tts_key = json.loads(os.environ["TTS"])
 
-credentials = service_account.Credentials.from_service_account_file(tts_key)
+with open("sample.json", "w") as outfile:
+    json.dump(os.environ["DB_KEY"], outfile)
+
+credentials = service_account.Credentials.from_service_account_file('sample.json')
 
 def textToWav(voice_name: str, text: str):
     language_code = "-".join(voice_name.split("-")[:2])
@@ -29,4 +30,4 @@ def textToWav(voice_name: str, text: str):
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
         
-#text_to_wav("en-GB-Neural2-B", "What is the temperature in London?")
+textToWav("en-GB-Neural2-B", "What is the temperature in London?")
