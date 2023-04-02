@@ -48,6 +48,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     print(movie_name)
     print(type(movie_name))
     reviews_list = read(movie_name)
+    print(reviews_list)
     if len(reviews_list) != 0:
         for review in reviews_list:
             (output, username) = reviewOutput(review)

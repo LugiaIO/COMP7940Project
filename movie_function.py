@@ -43,10 +43,10 @@ def read(movie_name):
     # Create a query against the collection reference.
     coll_ref = getReference("reviews")
     collections = coll_ref.document(movie_name).collections()
-    comment_list = []
+    reviews_list = []
     for collection in collections:
         for doc in collection.stream():
-            comment_list.append(doc.to_dict())
+            reviews_list.append(doc.to_dict())
 
-    return comment_list
+    return reviews_list
 
