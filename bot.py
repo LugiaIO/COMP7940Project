@@ -61,6 +61,10 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
             os.remove(f"{movie_name}_{username}.wav")
     else:
         update.message.reply_text("No review for this movie.")
+    
+    if movie_name == '':
+        update.message.reply_text("Please input movie name!")
+
 
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
