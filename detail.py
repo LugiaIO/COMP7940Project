@@ -40,6 +40,6 @@ def movieOutput(movie):
     return detail, image_link
 
 
-def commentOutput(comment):
-    detail = comment['comment'] + " - @" + comment['username']
-    return detail, comment['username']
+def reviewOutput(review):
+    detail = '**"' + review['review'] + '"** - @' + review['username']
+    return detail, review['username']

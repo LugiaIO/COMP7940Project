@@ -3,7 +3,7 @@ import http
 
 from flask import Flask, request
 from werkzeug.wrappers import Response
-from detail import movieOutput, commentOutput
+from detail import movieOutput, reviewOutput
 from telegram import Bot, Update
 from telegram.ext import (
     Dispatcher,
@@ -50,7 +50,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     reviews_list = read(movie_name)
     if len(reviews_list) != 0:
         for review in reviews_list:
-            (output, username) = commentOutput(review)
+            (output, username) = reviewOutput(review)
             update.message.reply_text(output)
             textToWav("en-GB-Neural2-B", output, movie_name, username)
             update.message.bot.send_audio(
