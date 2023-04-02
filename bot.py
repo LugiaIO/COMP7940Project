@@ -13,7 +13,7 @@ from telegram.ext import (
     CommandHandler,
 )
 from tts import textToWav
-from movie_function import randomMovie, search, read
+from movie_function import randomMovie, search, read, imdbTop3
 
 app = Flask(__name__)
 
@@ -78,6 +78,18 @@ def randomMovieCommand(update: Update, context: CallbackContext) -> None:
         chat_id=update.effective_chat.id, photo=image_link, caption=detail
     )
 
+def imdbTop3(update: Update, context: CallbackContext) -> None:
+    
+    movie_list = imdbTop3()
+    if len(movie_list) != 0:
+        for movie in movie_list:
+            (detail, image_link) = movieOutput(movie)
+            update.message.bot.send_photo(
+                chat_id=update.effective_chat.id, photo=image_link, caption=detail
+            )
+    else:
+        update.message.reply_text("No results found!")
+
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
@@ -85,7 +97,7 @@ dispatcher.add_handler(CommandHandler("help", helpCommand))
 dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
-
+dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3))
 
 @app.post("/")
 def index() -> Response:

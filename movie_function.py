@@ -49,3 +49,11 @@ def read(movie_name):
             reviews_list.append(doc.to_dict())
     print(reviews_list)
     return reviews_list
+
+def imdbTop3():
+    movie_list = []
+    coll_ref = getReference("movies")
+    for doc in coll_ref.stream():
+        movie_list.append(doc.to_dict())
+
+    return movie_list[0:2]
