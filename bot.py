@@ -73,9 +73,9 @@ def randomMovieCommand(update: Update, context: CallbackContext) -> None:
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
-dispatcher.add_handler(CommandHandler("randomMovie", randomMovieCommand))
+dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
-dispatcher.add_handler(CommandHandler("readReviews", readReviewsCommand))
+dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
 
 
 @app.post("/")
