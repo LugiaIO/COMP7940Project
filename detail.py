@@ -42,4 +42,4 @@ def movieOutput(movie):
 
 def commentOutput(comment):
     detail = comment['comment'] + " - @" + comment['username']
-    return detail
+    return detail, comment['username']

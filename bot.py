@@ -48,10 +48,11 @@ def readCommentCommand(update: Update, context: CallbackContext) -> None:
     comment_list = read(movie_name)
     if len(comment_list) != 0:
         for comment in comment_list:
-            update.message.reply_text(commentOutput(comment))
-            textToWav("en-GB-Neural2-B",commentOutput(comment))
-            update.message.bot.send_audio(chat_id=update.effective_chat.id, audio=open('en-GB-Neural2-B.wav', 'rb'))
-            os.remove('en-GB-Neural2-B.wav')
+            (output, username) = commentOutput(comment)
+            update.message.reply_text()
+            textToWav("en-GB-Neural2-B",output)
+            update.message.bot.send_audio(chat_id=update.effective_chat.id, audio=open(f'{movie_name}_{username}.wav', 'rb'))
+            os.remove(f'{movie_name}_{username}.wav')
     else:
         update.message.reply_text("No comment for this movie.")
 
