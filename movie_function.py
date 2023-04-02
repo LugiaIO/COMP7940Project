@@ -16,10 +16,13 @@ app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 
 # A reference to the movies collection.
-coll_ref = firestore_client.collection("movies")
+def getReference(collection):
+    coll_ref = firestore_client.collection(collection)
+    return coll_ref
 
 def randomMovie():
     movie_list = []
+    coll_ref = getReference("movies")
     for doc in coll_ref.stream():
         movie_list.append(doc.to_dict())
     
@@ -27,6 +30,7 @@ def randomMovie():
 
 def search(keyword):
     # Create a query against the collection reference.
+    coll_ref = getReference("movies")
     query_ref = coll_ref.where("Series_Title_Index", "array_contains", keyword)
     movie_list = []
     # Print the documents returned from the query:
@@ -34,3 +38,15 @@ def search(keyword):
         movie_list.append(doc.to_dict())
     
     return movie_list
+
+def comment(movie_name):
+    # Create a query against the collection reference.
+    coll_ref = getReference("movies")
+    query_ref = coll_ref.where("Series_Title", "==", movie_name)
+    movie_list = []
+    # Print the documents returned from the query:
+    for doc in query_ref.stream():
+        movie_list.append(doc.to_dict())
+    
+    return movie_list
+
