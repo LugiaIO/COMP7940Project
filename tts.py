@@ -26,7 +26,7 @@ def textToWav(voice_name: str, text: str):
     )
 
     filename = f"{voice_name}.wav"
-    with open(filename, "wb") as out:
+    with open("voice/"+filename, "wb") as out:
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
         
