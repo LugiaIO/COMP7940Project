@@ -29,13 +29,16 @@ def helpCommand(update: Update, context: CallbackContext) -> None:
 
 def searchCommand(update: Update, context: CallbackContext) -> None:
     keyword_list = context.args
-    for keyword in keyword_list:
-        movie_list = search(keyword)
-        for movie in movie_list:
-            (detail, image_link) = output(movie)
-            update.message.bot.send_photo(
-                chat_id=update.effective_chat.id, photo=image_link, caption=detail
-            )
+    if len(keyword_list)!=0:
+        for keyword in keyword_list:
+            movie_list = search(keyword)
+            for movie in movie_list:
+                (detail, image_link) = output(movie)
+                update.message.bot.send_photo(
+                    chat_id=update.effective_chat.id, photo=image_link, caption=detail
+                )
+    else:
+        update.message.reply_text("Please input keyword! Usage: /search <keyword>")
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
     movie = randomMovie()
