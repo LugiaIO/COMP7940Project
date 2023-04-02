@@ -7,7 +7,7 @@ import json
 
 # Fetch the service account key JSON file contents
 json_object = json.loads(os.environ["DB_KEY"])
-cred = credentials.Certificate("json_object")
+cred = credentials.Certificate(json_object)
 # Initialize the app with a service account, granting admin privileges
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
