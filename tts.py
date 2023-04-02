@@ -9,7 +9,7 @@ tts_key = json.loads(os.environ["TTS"])
 
 credentials = service_account.Credentials.from_service_account_file(tts_key)
 
-def text_to_wav(voice_name: str, text: str):
+def textToWav(voice_name: str, text: str):
     language_code = "-".join(voice_name.split("-")[:2])
     text_input = tts.SynthesisInput(text=text)
     voice_params = tts.VoiceSelectionParams(
@@ -29,4 +29,4 @@ def text_to_wav(voice_name: str, text: str):
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
         
-text_to_wav("en-GB-Neural2-B", "What is the temperature in London?")
+#text_to_wav("en-GB-Neural2-B", "What is the temperature in London?")
