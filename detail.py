@@ -41,5 +41,5 @@ def movieOutput(movie):
 
 
 def reviewOutput(review):
-    detail = '"' + review['review'] + '" - @' + review['username']
+    detail = '"' + review['movie_reviews'] + '" - @' + review['username']
     return detail, review['username']

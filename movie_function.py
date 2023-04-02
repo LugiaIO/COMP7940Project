@@ -41,7 +41,7 @@ def search(keyword):
 
 def read(movie_name):
     # Create a query against the collection reference.
-    coll_ref = getReference("reviews")
+    coll_ref = getReference("movie_reviews")
     collections = coll_ref.document(movie_name).collections()
     reviews_list = []
     for collection in collections:
