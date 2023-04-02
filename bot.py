@@ -46,7 +46,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     movie_name = context.args
     movie_name = " ".join(movie_name)
     print(movie_name)
-    print(type(movie_name)+"ssss"+movie_name)
+    print(str(type(movie_name))+"ssss"+movie_name)
     reviews_list = read(movie_name)
     print(reviews_list)
     if len(reviews_list) != 0 and len(movie_name)!=0:
