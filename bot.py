@@ -59,7 +59,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
                 audio=open(f"{movie_name}_{username}.wav", "rb"),
             )
             os.remove(f"{movie_name}_{username}.wav")
-    else:
+    elif len(movie_name) == 0:
         update.message.reply_text("No review for this movie.")
 
 
