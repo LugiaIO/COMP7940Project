@@ -3,7 +3,7 @@ import http
 
 from flask import Flask, request
 from werkzeug.wrappers import Response
-from detail import output
+from detail import movieOutput, commentOutput
 from telegram import Bot, Update
 from telegram.ext import (
     Dispatcher,
@@ -33,7 +33,7 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
         for keyword in keyword_list:
             movie_list = search(keyword)
             for movie in movie_list:
-                (detail, image_link) = output(movie)
+                (detail, image_link) = movieOutput(movie)
                 update.message.bot.send_photo(
                     chat_id=update.effective_chat.id, photo=image_link, caption=detail
                 )
@@ -47,14 +47,15 @@ def readCommentCommand(update: Update, context: CallbackContext) -> None:
     print(type(movie_name))
     comment_list = read(movie_name)
     if len(comment_list) != 0:
-        update.message.reply_text(comment_list)
-    #if:
-    #else:
-    #    update.message.reply_text("Please input keyword! Usage: /search <keyword>")
+        for comment in comment_list:
+            update.message.reply_text(commentOutput(comment))
+    else:
+        update.message.reply_text("No comment for this movie.")
+
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
     movie = randomMovie()
-    (detail, image_link) = output(movie)
+    (detail, image_link) = movieOutput(movie)
     update.message.bot.send_photo(
         chat_id=update.effective_chat.id, photo=image_link, caption=detail
     )
