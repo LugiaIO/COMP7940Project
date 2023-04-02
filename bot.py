@@ -42,7 +42,7 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
 
 def readCommentCommand(update: Update, context: CallbackContext) -> None:
     movie_name = context.args
-    movie_name = ' '.join(movie_name)
+    movie_name = " ".join(movie_name)
     print(movie_name)
     print(type(movie_name))
     comment_list = read(movie_name)
