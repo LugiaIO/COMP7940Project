@@ -49,7 +49,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     print(type(movie_name))
     reviews_list = read(movie_name)
     print(reviews_list)
-    if len(reviews_list) != 0:
+    if len(reviews_list) != 0 and len(movie_name)!=0:
         for review in reviews_list:
             (output, username) = reviewOutput(review)
             update.message.reply_text(output)
@@ -59,7 +59,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
                 audio=open(f"{movie_name}_{username}.wav", "rb"),
             )
             os.remove(f"{movie_name}_{username}.wav")
-    elif len(movie_name) == 0:
+    else:
         update.message.reply_text("No review for this movie.")
 
 
