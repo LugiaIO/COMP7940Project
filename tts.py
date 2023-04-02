@@ -6,7 +6,7 @@ import json
 
 
 with open("sample.json", "w") as outfile:
-    json.dump(os.environ["TTS"], outfile)
+    json.dump(json.loads(os.environ["TTS"]), outfile)
 
 credentials = service_account.Credentials.from_service_account_file('sample.json')
 
