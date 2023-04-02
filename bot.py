@@ -62,7 +62,7 @@ dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
 dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
-
+dispatcher.add_handler(CommandHandler("read", readCommentCommand))
 
 @app.post("/")
 def index() -> Response:
