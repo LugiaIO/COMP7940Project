@@ -54,7 +54,7 @@ def readCommentCommand(update: Update, context: CallbackContext) -> None:
             update.message.bot.send_audio(chat_id=update.effective_chat.id, audio=open(f'{movie_name}_{username}.wav', 'rb'))
             os.remove(f'{movie_name}_{username}.wav')
     else:
-        update.message.reply_text("No comment for this movie.")
+        update.message.reply_text("No review for this movie.")
 
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
