@@ -19,6 +19,7 @@ app = Flask(__name__)
 
 bot = Bot(token=os.environ["TOKEN"])
 
+
 def echo(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(update.message.text)
 
@@ -29,7 +30,7 @@ def helpCommand(update: Update, context: CallbackContext) -> None:
 
 def searchCommand(update: Update, context: CallbackContext) -> None:
     keyword_list = context.args
-    if len(keyword_list)!=0:
+    if len(keyword_list) != 0:
         for keyword in keyword_list:
             movie_list = search(keyword)
             for movie in movie_list:
@@ -40,19 +41,23 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
     else:
         update.message.reply_text("Please input keyword! Usage: /search <keyword>")
 
-def readCommentCommand(update: Update, context: CallbackContext) -> None:
+
+def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     movie_name = context.args
     movie_name = " ".join(movie_name)
     print(movie_name)
     print(type(movie_name))
-    comment_list = read(movie_name)
-    if len(comment_list) != 0:
-        for comment in comment_list:
-            (output, username) = commentOutput(comment)
+    reviews_list = read(movie_name)
+    if len(reviews_list) != 0:
+        for review in reviews_list:
+            (output, username) = commentOutput(review)
             update.message.reply_text(output)
-            textToWav("en-GB-Neural2-B",output, movie_name, username)
-            update.message.bot.send_audio(chat_id=update.effective_chat.id, audio=open(f'{movie_name}_{username}.wav', 'rb'))
-            os.remove(f'{movie_name}_{username}.wav')
+            textToWav("en-GB-Neural2-B", output, movie_name, username)
+            update.message.bot.send_audio(
+                chat_id=update.effective_chat.id,
+                audio=open(f"{movie_name}_{username}.wav", "rb"),
+            )
+            os.remove(f"{movie_name}_{username}.wav")
     else:
         update.message.reply_text("No review for this movie.")
 
@@ -64,12 +69,14 @@ def randomMovieCommand(update: Update, context: CallbackContext) -> None:
         chat_id=update.effective_chat.id, photo=image_link, caption=detail
     )
 
+
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
-dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
+dispatcher.add_handler(CommandHandler("randomMovie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
-dispatcher.add_handler(CommandHandler("read", readCommentCommand))
+dispatcher.add_handler(CommandHandler("readReviews", readReviewsCommand))
+
 
 @app.post("/")
 def index() -> Response:
