@@ -10,7 +10,7 @@ with open("sample.json", "w") as outfile:
 
 credentials = service_account.Credentials.from_service_account_file('sample.json')
 
-def textToWav(voice_name: str, text: str):
+def textToWav(voice_name: str, text: str, movie_name: str, username: str):
     language_code = "-".join(voice_name.split("-")[:2])
     text_input = tts.SynthesisInput(text=text)
     voice_params = tts.VoiceSelectionParams(
@@ -25,7 +25,7 @@ def textToWav(voice_name: str, text: str):
         audio_config=audio_config,
     )
 
-    filename = f"{voice_name}.wav"
+    filename = f'{movie_name}_{username}.wav'
     with open(filename, "wb") as out:
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
