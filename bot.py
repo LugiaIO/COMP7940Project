@@ -13,7 +13,7 @@ from telegram.ext import (
     CommandHandler,
 )
 
-from movie_function import randomMovie, search
+from movie_function import randomMovie, search, read
 
 app = Flask(__name__)
 
@@ -39,6 +39,16 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
                 )
     else:
         update.message.reply_text("Please input keyword! Usage: /search <keyword>")
+
+def readCommentCommand(update: Update, context: CallbackContext) -> None:
+    movie_name = context.args
+    movie_name = ''.join(movie_name)
+    comment_list = read(movie_name)
+    if len(comment_list) != 0:
+        update.message.reply_text(comment_list)
+    #if:
+    #else:
+    #    update.message.reply_text("Please input keyword! Usage: /search <keyword>")
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
     movie = randomMovie()
