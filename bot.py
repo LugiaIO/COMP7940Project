@@ -45,7 +45,7 @@ def readCommentCommand(update: Update, context: CallbackContext) -> None:
     movie_name = ''.join(movie_name)
     comment_list = read(movie_name)
     if len(comment_list) != 0:
-        update.message.reply_text(comment_list)
+        update.message.reply_text("test")
     #if:
     #else:
     #    update.message.reply_text("Please input keyword! Usage: /search <keyword>")
