@@ -6,9 +6,10 @@ import os
 import json
 import uuid
 
+
 # Fetch the service account key JSON file contents
-json_object = json.loads(os.environ["DB_KEY"])
-cred = credentials.Certificate(json_object)
+# json_object = json.loads(os.environ["DB_KEY"])
+cred = credentials.Certificate("ss.json")
 # Initialize the app with a service account, granting admin privileges
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
@@ -51,6 +52,7 @@ def read(movie_name):
     print(reviews_list)
     return reviews_list
 
+
 def imdbTop3():
     movie_list = []
     coll_ref = getReference("movies")
@@ -59,9 +61,23 @@ def imdbTop3():
 
     return movie_list[0:2]
 
+
 def addToNote(data):
     myuuid = uuid.uuid4()
     myuuidStr = str(myuuid)
     coll_ref = getReference("notebook")
     doc_ref = coll_ref.document(myuuidStr)
     doc_ref.set(data)
+
+
+def addReview(movie_name, data, username):
+    myuuid = uuid.uuid4()
+    myuuidStr = str(myuuid)
+    coll_ref = getReference("movies_reviews").document(movie_name)
+    doc_coll = coll_ref.collection(username)
+    doc_ref = doc_coll.document(myuuidStr)
+    doc_ref.set(data)
+
+
+# data = {'movie_reviews':'s','username':'username'}
+# addReview('The Shawshank Redemption',df,'ss')

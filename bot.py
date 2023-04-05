@@ -14,7 +14,7 @@ from telegram.ext import (
     ConversationHandler,
 )
 from tts import textToWav
-from movie_function import randomMovie, search, read, imdbTop3, addToNote
+from movie_function import randomMovie, search, read, imdbTop3, addToNote, addReview
 
 MOVIE_NAME, MOVIE_GENRE, MOVIE_NOTE = range(3)
 
@@ -95,26 +95,26 @@ def imdbTop3Command(update: Update, context: CallbackContext) -> None :
     else:
         update.message.reply_text("No results found!")
 
-def start_note(update: Update, context: CallbackContext) -> None :
+def startNote(update: Update, context: CallbackContext) -> None :
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
     return MOVIE_NAME
 
 
-def receive_name(update: Update, context: CallbackContext) -> None :
+def receiveName(update: Update, context: CallbackContext) -> None :
     name = update.message.text
     context.user_data['name'] = name
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the genre:")
     return MOVIE_GENRE
 
 
-def receive_genre(update: Update, context: CallbackContext) -> None :
+def receiveGenre(update: Update, context: CallbackContext) -> None :
     genre = update.message.text
     context.user_data['genre'] = genre
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the note:")
     return MOVIE_NOTE
 
 
-def receive_note(update: Update, context: CallbackContext) -> None :
+def receiveNote(update: Update, context: CallbackContext) -> None :
     note = update.message.text
     context.user_data['note'] = note
     context.user_data['username'] = update.effective_user.username
@@ -127,11 +127,11 @@ def cancel(update: Update, context: CallbackContext) -> None :
     return ConversationHandler.END
 
 conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start_note', start_note)],
+        entry_points=[CommandHandler('start_note', startNote)],
         states={
-            MOVIE_NAME: [MessageHandler(Filters.text & ~Filters.command, receive_name)],
-            MOVIE_GENRE: [MessageHandler(Filters.text & ~Filters.command, receive_genre)],
-            MOVIE_NOTE: [MessageHandler(Filters.text & ~Filters.command, receive_note)]
+            MOVIE_NAME: [MessageHandler(Filters.text & ~Filters.command, receiveName)],
+            MOVIE_GENRE: [MessageHandler(Filters.text & ~Filters.command, receiveGenre)],
+            MOVIE_NOTE: [MessageHandler(Filters.text & ~Filters.command, receiveNote)]
         },
         fallbacks=[CommandHandler('cancel',cancel)]
     )
@@ -144,7 +144,6 @@ dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
 dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
 dispatcher.add_handler(conv_handler)
-dispatcher.add_handler(CommandHandler('cancel', cancel))
 
 
 @app.post("/")
