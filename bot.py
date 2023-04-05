@@ -136,6 +136,40 @@ conv_handler = ConversationHandler(
         fallbacks=[CommandHandler('cancel',cancel)]
     )
 
+MOVIE_NAME_REVIEW, MOVIE_REVIEW = range(2)
+
+review_conv_handler = ConversationHandler(
+    entry_points=[CommandHandler('write_review', writereviewCommand)],
+    states={
+        MOVIE_NAME_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveMovieName)],
+        MOVIE_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveReview)]
+                        },
+    fallbacks=[CommandHandler('cancel', cancel)]
+)
+
+def writereviewCommand(update: Update, context: CallbackContext) -> None :
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
+    return MOVIE_NAME_REVIEW
+
+
+def receiveMovieName(update: Update, context: CallbackContext) -> None :
+    name = update.message.text
+    context.user_data['movie_name'] = name
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the review:")
+    return MOVIE_REVIEW
+
+def receiveReview(update: Update, context: CallbackContext) -> None :
+    movie_reviews = update.message.text
+    context.user_data['movie_reviews'] = movie_reviews
+    context.user_data['username'] = update.effective_user.username
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Here is the information you provided:\nMovie name: {}\nReview: {}\nUsername: {}".format(context.user_data['movie_name'], context.user_data['movie_reviews'], context.user_data['username']))
+    #addReview(context.user_data)
+    return ConversationHandler.END
+
+def cancel(update: Update, context: CallbackContext) -> None :
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
+    return ConversationHandler.END
+
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 #dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
@@ -144,7 +178,7 @@ dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
 dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
 dispatcher.add_handler(conv_handler)
-
+dispatcher.add_handler(review_conv_handler)
 
 @app.post("/")
 def index() -> Response:
