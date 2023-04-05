@@ -4,6 +4,7 @@ from firebase_admin import firestore
 from firebase_admin import credentials
 import os
 import json
+import uuid
 
 # Fetch the service account key JSON file contents
 json_object = json.loads(os.environ["DB_KEY"])
@@ -57,3 +58,10 @@ def imdbTop3():
         movie_list.append(doc.to_dict())
 
     return movie_list[0:2]
+
+def addToNote(data):
+    myuuid = uuid.uuid4()
+    myuuidStr = str(myuuid)
+    coll_ref = getReference("notebook")
+    doc_ref = coll_ref.document(myuuidStr)
+    doc_ref.set(data)

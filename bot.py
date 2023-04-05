@@ -13,7 +13,7 @@ from telegram.ext import (
     CommandHandler,
 )
 from tts import textToWav
-from movie_function import randomMovie, search, read, imdbTop3
+from movie_function import randomMovie, search, read, imdbTop3, addToNote
 
 app = Flask(__name__)
 
