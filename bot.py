@@ -119,7 +119,6 @@ def receive_note(update, context):
     context.user_data['note'] = note
     context.user_data['username'] = update.effective_user.username
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Here is the information you provided:\nName: {}\nAge: {}\nNote: {}\nUsername: {}".format(context.user_data['name'], context.user_data['genre'], context.user_data['note'], context.user_data['username']))
-    #addToNote(context.user_data)
     return ConversationHandler.END
 
 def cancel(update, context):
