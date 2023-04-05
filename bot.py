@@ -11,6 +11,7 @@ from telegram.ext import (
     MessageHandler,
     CallbackContext,
     CommandHandler,
+    ConversationHandler,
 )
 from tts import textToWav
 from movie_function import randomMovie, search, read, imdbTop3
@@ -91,36 +92,49 @@ def imdbTop3Command(update: Update, context: CallbackContext) -> None:
             )
     else:
         update.message.reply_text("No results found!")
-# ####### New ADD
-# def send_welcome(update: Update, context:CallbackContext) -> None:
-#     update.message.reply_text("Welcome to Note-record, now you can create new records, or view existing records. Add_note format as below, title + content")
 
-# def add_note(update: Update, context:CallbackContext) -> None:
-#         chat_id = update.effective_chat.id
-#         length = len(context.args)
-#         if length == 0:
-#             update.message.reply_text("Please specify the title of the new record")
-#         elif length ==1:
-#             update.message.reply_text("Please also specify the content of the new record")
-#         else:
-#             title = context.args[0]
-#             content = ' '.join(context.args[1:])
-#             redis1.hmset(chat_id, {'title': title, 'content': content})
-#             update.message.reply_text("A new record has been created with the following title:",content)
-       
-# def list_note(update: Update,context:CallbackContext) -> None:
-#     try:
-#         chat_id = update.effective_chat.id
-#         if chat_id not in redis1.hgetall(chat_id):
-#             update.message.reply_text("No recording")
-#         else:
-#             reply_message = ''
-#             for note_title in redis1.hgetall(chat_id):
-#                 reply_message += redis1.hget(chat_id,note_title.decode('utf-8')).decode('utf-8') + '\n'
-#             update.message.reply_text(reply_message)
-#     except(IndexError,ValueError):
-#         update.message.reply_text('Error,please try again')
-# ######
+MOVIE_NAME, MOVIE_GENRE, MOVIE_NOTE = range(3)
+
+def start_note(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
+    return MOVIE_NAME
+
+
+def receive_name(update, context):
+    name = update.message.text
+    context.user_data['name'] = name
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the genre:")
+    return MOVIE_GENRE
+
+
+def receive_genre(update, context):
+    genre = update.message.text
+    context.user_data['genre'] = genre
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the note:")
+    return MOVIE_NOTE
+
+
+def receive_note(update, context):
+    note = update.message.text
+    context.user_data['note'] = note
+    context.user_data['username'] = update.effective_user.username
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Here is the information you provided:\nName: {}\nAge: {}\nNote: {}\nUsername: {}".format(context.user_data['name'], context.user_data['genre'], context.user_data['note'], context.user_data['username']))
+    #addToNote(context.user_data)
+    return ConversationHandler.END
+
+def cancel(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
+    return ConversationHandler.END
+
+conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start_note', start_note)],
+        states={
+            MOVIE_NAME: [MessageHandler(Filters.text & ~Filters.command, receive_name)],
+            MOVIE_GENRE: [MessageHandler(Filters.text & ~Filters.command, receive_genre)],
+            MOVIE_NOTE: [MessageHandler(Filters.text & ~Filters.command, receive_note)]
+        },
+        fallbacks=[CommandHandler('cancel',cancel)]
+    )
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
@@ -129,11 +143,9 @@ dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
 dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
-# #new add
-# dispatcher.add_handler(CommandHandler('notebook',send_welcome))
-# dispatcher.add_handler(CommandHandler('newnote',add_note))
-# dispatcher.add_handler(CommandHandler('listnote',list_note))
-# #####
+dispatcher.add_handler(CommandHandler('start_note', start_note))
+dispatcher.add_handler(CommandHandler('cancel', cancel))
+
 
 @app.post("/")
 def index() -> Response:
