@@ -23,15 +23,15 @@ app = Flask(__name__)
 bot = Bot(token=os.environ["TOKEN"])
 
 
-# def echo(update, context) :
+# def echo(update: Update, context: CallbackContext) -> None :
 #     update.message.reply_text(update.message.text)
 
 
-def helpCommand(update, context) :
+def helpCommand(update: Update, context: CallbackContext) -> None :
     update.message.reply_text("Helping you helping you.")
 
 
-def searchCommand(update, context) :
+def searchCommand(update: Update, context: CallbackContext) -> None :
     keyword_list = context.args
     if len(keyword_list) != 0:
         for keyword in keyword_list:
@@ -50,7 +50,7 @@ def searchCommand(update, context) :
         update.message.reply_text("Please input keyword! Usage: /search <keyword>")
 
 
-def readReviewsCommand(update, context) :
+def readReviewsCommand(update: Update, context: CallbackContext) -> None :
     movie_name = context.args
     if len(movie_name) == 0:
         update.message.reply_text(
@@ -76,14 +76,14 @@ def readReviewsCommand(update, context) :
             update.message.reply_text("No review for this movie.")
 
 
-def randomMovieCommand(update, context) :
+def randomMovieCommand(update: Update, context: CallbackContext) -> None :
     movie = randomMovie()
     (detail, image_link) = movieOutput(movie)
     update.message.bot.send_photo(
         chat_id=update.effective_chat.id, photo=image_link, caption=detail
     )
 
-def imdbTop3Command(update, context) :
+def imdbTop3Command(update: Update, context: CallbackContext) -> None :
     
     movie_list = imdbTop3()
     if len(movie_list) != 0:
@@ -95,26 +95,26 @@ def imdbTop3Command(update, context) :
     else:
         update.message.reply_text("No results found!")
 
-def start_note(update, context) :
+def start_note(update: Update, context: CallbackContext) -> None :
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
     return MOVIE_NAME
 
 
-def receive_name(update, context) :
+def receive_name(update: Update, context: CallbackContext) -> None :
     name = update.message.text
     context.user_data['name'] = name
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the genre:")
     return MOVIE_GENRE
 
 
-def receive_genre(update, context) :
+def receive_genre(update: Update, context: CallbackContext) -> None :
     genre = update.message.text
     context.user_data['genre'] = genre
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the note:")
     return MOVIE_NOTE
 
 
-def receive_note(update, context) :
+def receive_note(update: Update, context: CallbackContext) -> None :
     note = update.message.text
     context.user_data['note'] = note
     context.user_data['username'] = update.effective_user.username
@@ -122,7 +122,7 @@ def receive_note(update, context) :
     addToNote(context.user_data)
     return ConversationHandler.END
 
-def cancel(update, context) :
+def cancel(update: Update, context: CallbackContext) -> None :
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
     return ConversationHandler.END
 
@@ -143,7 +143,7 @@ dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
 dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
-dispatcher.add_handler(ConversationHandler('start_note', start_note))
+dispatcher.add_handler(conv_handler)
 dispatcher.add_handler(CommandHandler('cancel', cancel))
 
 
