@@ -95,26 +95,26 @@ def imdbTop3Command(update: Update, context: CallbackContext) -> None:
     else:
         update.message.reply_text("No results found!")
 
-def start_note(update: Update, context: CallbackContext):
+def start_note(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
     return MOVIE_NAME
 
 
-def receive_name(update: Update, context: CallbackContext):
+def receive_name(update, context):
     name = update.message.text
     context.user_data['name'] = name
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the genre:")
     return MOVIE_GENRE
 
 
-def receive_genre(update: Update, context: CallbackContext):
+def receive_genre(update, context):
     genre = update.message.text
     context.user_data['genre'] = genre
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Now please input the note:")
     return MOVIE_NOTE
 
 
-def receive_note(update: Update, context: CallbackContext):
+def receive_note(update, context):
     note = update.message.text
     context.user_data['note'] = note
     context.user_data['username'] = update.effective_user.username
@@ -122,7 +122,7 @@ def receive_note(update: Update, context: CallbackContext):
     addToNote(context.user_data)
     return ConversationHandler.END
 
-def cancel(update: Update, context: CallbackContext):
+def cancel(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
     return ConversationHandler.END
 
