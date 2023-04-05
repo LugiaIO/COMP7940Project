@@ -37,7 +37,9 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
                 for movie in movie_list:
                     (detail, image_link) = movieOutput(movie)
                     update.message.bot.send_photo(
-                        chat_id=update.effective_chat.id, photo=image_link, caption=detail
+                        chat_id=update.effective_chat.id,
+                        photo=image_link,
+                        caption=detail,
                     )
             else:
                 update.message.reply_text("No results found!")
@@ -48,14 +50,16 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
 def readReviewsCommand(update: Update, context: CallbackContext) -> None:
     movie_name = context.args
     if len(movie_name) == 0:
-        update.message.reply_text("Please input moive name! Usage: /read_reviews <moive name>")
+        update.message.reply_text(
+            "Please input moive name! Usage: /read_reviews <moive name>"
+        )
     else:
         movie_name = " ".join(movie_name)
         print(movie_name)
-        print(str(type(movie_name))+"ssss"+movie_name)
+        print(str(type(movie_name)) + "ssss" + movie_name)
         reviews_list = read(movie_name)
         print(reviews_list)
-        if len(reviews_list) != 0 and len(movie_name)!=0:
+        if len(reviews_list) != 0 and len(movie_name) != 0:
             for review in reviews_list:
                 (output, username) = reviewOutput(review)
                 update.message.reply_text(output)
@@ -67,8 +71,6 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
                 os.remove(f"{movie_name}_{username}.wav")
         else:
             update.message.reply_text("No review for this movie.")
-        
-
 
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:

@@ -8,7 +8,8 @@ import json
 with open("sample.json", "w") as outfile:
     json.dump(json.loads(os.environ["TTS"]), outfile)
 
-credentials = service_account.Credentials.from_service_account_file('sample.json')
+credentials = service_account.Credentials.from_service_account_file("sample.json")
+
 
 def textToWav(voice_name: str, text: str, movie_name: str, username: str):
     language_code = "-".join(voice_name.split("-")[:2])
@@ -25,9 +26,7 @@ def textToWav(voice_name: str, text: str, movie_name: str, username: str):
         audio_config=audio_config,
     )
 
-    filename = f'{movie_name}_{username}.wav'
+    filename = f"{movie_name}_{username}.wav"
     with open(filename, "wb") as out:
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
-        
-#textToWav("en-GB-Neural2-B", "What is the temperature in London?")
