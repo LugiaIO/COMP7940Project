@@ -8,8 +8,8 @@ import uuid
 
 
 # Fetch the service account key JSON file contents
-# json_object = json.loads(os.environ["DB_KEY"])
-cred = credentials.Certificate("ss.json")
+json_object = json.loads(os.environ["DB_KEY"])
+cred = credentials.Certificate(json_object)
 # Initialize the app with a service account, granting admin privileges
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
@@ -70,11 +70,11 @@ def addToNote(data):
     doc_ref.set(data)
 
 
-def addReview(movie_name, data, username):
+def addReview(data):
     myuuid = uuid.uuid4()
     myuuidStr = str(myuuid)
-    coll_ref = getReference("movies_reviews").document(movie_name)
-    doc_coll = coll_ref.collection(username)
+    coll_ref = getReference("movies_reviews").document(data['movie_name'])
+    doc_coll = coll_ref.collection(data['username'])
     doc_ref = doc_coll.document(myuuidStr)
     doc_ref.set(data)
 
