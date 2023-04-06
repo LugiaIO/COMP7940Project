@@ -17,6 +17,8 @@ from tts import textToWav
 from movie_function import randomMovie, search, read, imdbTop3, addToNote, addReview
 
 MOVIE_NAME, MOVIE_GENRE, MOVIE_NOTE = range(3)
+MOVIE_NAME_REVIEW, MOVIE_REVIEW = range(2)
+
 
 app = Flask(__name__)
 
@@ -122,31 +124,6 @@ def receiveNote(update: Update, context: CallbackContext) -> None :
     addToNote(context.user_data)
     return ConversationHandler.END
 
-def cancel(update: Update, context: CallbackContext) -> None :
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
-    return ConversationHandler.END
-
-conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start_note', startNote)],
-        states={
-            MOVIE_NAME: [MessageHandler(Filters.text & ~Filters.command, receiveName)],
-            MOVIE_GENRE: [MessageHandler(Filters.text & ~Filters.command, receiveGenre)],
-            MOVIE_NOTE: [MessageHandler(Filters.text & ~Filters.command, receiveNote)]
-        },
-        fallbacks=[CommandHandler('cancel',cancel)]
-    )
-
-MOVIE_NAME_REVIEW, MOVIE_REVIEW = range(2)
-
-review_conv_handler = ConversationHandler(
-    entry_points=[CommandHandler('write_review', writereviewCommand)],
-    states={
-        MOVIE_NAME_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveMovieName)],
-        MOVIE_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveReview)]
-                        },
-    fallbacks=[CommandHandler('cancel', cancel)]
-)
-
 def writereviewCommand(update: Update, context: CallbackContext) -> None :
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! Please input the movie name:")
     return MOVIE_NAME_REVIEW
@@ -163,12 +140,33 @@ def receiveReview(update: Update, context: CallbackContext) -> None :
     context.user_data['movie_reviews'] = movie_reviews
     context.user_data['username'] = update.effective_user.username
     context.bot.send_message(chat_id=update.effective_chat.id, text="Thanks! Here is the information you provided:\nMovie name: {}\nReview: {}\nUsername: {}".format(context.user_data['movie_name'], context.user_data['movie_reviews'], context.user_data['username']))
-    #addReview(context.user_data)
+    addReview(context.user_data)
     return ConversationHandler.END
+
 
 def cancel(update: Update, context: CallbackContext) -> None :
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, something went wrong. Conversation canceled.")
     return ConversationHandler.END
+
+conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start_note', startNote)],
+        states={
+            MOVIE_NAME: [MessageHandler(Filters.text & ~Filters.command, receiveName)],
+            MOVIE_GENRE: [MessageHandler(Filters.text & ~Filters.command, receiveGenre)],
+            MOVIE_NOTE: [MessageHandler(Filters.text & ~Filters.command, receiveNote)]
+        },
+        fallbacks=[CommandHandler('cancel',cancel)]
+    )
+
+review_conv_handler = ConversationHandler(
+    entry_points=[CommandHandler('write_review', writereviewCommand)],
+    states={
+        MOVIE_NAME_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveMovieName)],
+        MOVIE_REVIEW: [MessageHandler(Filters.text & ~Filters.command, receiveReview)]
+                        },
+    fallbacks=[CommandHandler('cancel', cancel)]
+)
+
 
 dispatcher = Dispatcher(bot=bot, update_queue=None)
 #dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
