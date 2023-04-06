@@ -19,6 +19,13 @@ def getReference(collection):
     coll_ref = firestore_client.collection(collection)
     return coll_ref
 
+def listNotes():
+    note_list = []
+    coll_ref = getReference("notebook")
+    for doc in coll_ref.stream():
+        note_list.append(doc.to_dict())
+
+    return note_list
 
 def randomMovie():
     movie_list = []

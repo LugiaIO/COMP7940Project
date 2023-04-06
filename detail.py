@@ -22,3 +22,7 @@ def movieOutput(movie):
 def reviewOutput(review):
     detail = '"' + review['movie_reviews'] + '" - @' + review['username']
     return detail, review['username']
+
+def noteOutput(note):
+    detail = "Movie name: " + note['name']  + "\nGenre: " + note['genre'] + "\nNote: " + note['note'] + "\nUsername: " + note['username']
+    return detail,note['username']
