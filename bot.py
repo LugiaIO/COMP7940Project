@@ -93,17 +93,17 @@ def randomMovieCommand(update: Update, context: CallbackContext) -> None:
     )
 
 
-def imdbTop3Command(update: Update, context: CallbackContext) -> None:
+#def imdbTop3Command(update: Update, context: CallbackContext) -> None:
 
-    movie_list = imdbTop3()
-    if len(movie_list) != 0:
-        for movie in movie_list:
-            (detail, image_link) = movieOutput(movie)
-            update.message.bot.send_photo(
-                chat_id=update.effective_chat.id, photo=image_link, caption=detail
-            )
-    else:
-        update.message.reply_text("No results found!")
+#    movie_list = imdbTop3()
+#    if len(movie_list) != 0:
+#        for movie in movie_list:
+#            (detail, image_link) = movieOutput(movie)
+#            update.message.bot.send_photo(
+#                chat_id=update.effective_chat.id, photo=image_link, caption=detail
+#            )
+#    else:
+#        update.message.reply_text("No results found!")
 
 
 def listNoteCommand(update: Update, context: CallbackContext) -> None:
@@ -230,7 +230,7 @@ dispatcher.add_handler(CommandHandler("help", helpCommand))
 dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
-dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
+#dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
 dispatcher.add_handler(CommandHandler("list_note", listNoteCommand))
 dispatcher.add_handler(conv_handler)
 dispatcher.add_handler(review_conv_handler)
