@@ -17,8 +17,13 @@ state a set of command of chatbot
 
 dataPreprocess
 -csv2Json.py
--dbImport.py
+change csv to Json
+-dbImport.py 
+connect with database and import the data from imdb_final.json to database
 -imdb_final.json
+the detail of movie in json fosrmat
 -imdb_top_1000.csv
+the detail of movie in csv format 
 -imdb_top_1000.json
+the detail of movie in json format
 -preprocess_json.py
