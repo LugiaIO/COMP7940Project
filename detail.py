@@ -1,4 +1,5 @@
 def movieOutput(movie):
+    """Format the movie details for output."""
     detail = (
         "Series Title: "
         + movie["Series_Title"]
@@ -20,9 +21,21 @@ def movieOutput(movie):
 
 
 def reviewOutput(review):
-    detail = '"' + review['movie_reviews'] + '" - @' + review['username']
-    return detail, review['username']
+    """Format the review details for output."""
+    detail = '"' + review["movie_reviews"] + '" - @' + review["username"]
+    return detail, review["username"]
+
 
 def noteOutput(note):
-    detail = "Movie name: " + note['name']  + "\nGenre: " + note['genre'] + "\nNote: " + note['note'] + "\nUsername: " + note['username']
-    return detail,note['username']
+    """Format the note details for output."""
+    detail = (
+        "Movie name: "
+        + note["name"]
+        + "\nGenre: "
+        + note["genre"]
+        + "\nNote: "
+        + note["note"]
+        + "\nUsername: "
+        + note["username"]
+    )
+    return detail, note["username"]

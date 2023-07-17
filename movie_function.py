@@ -14,12 +14,16 @@ cred = credentials.Certificate(json_object)
 app = firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 
+
 # A reference to the movies collection.
 def getReference(collection):
+    """Get a reference to a Firestore collection."""
     coll_ref = firestore_client.collection(collection)
     return coll_ref
 
+
 def listNotes():
+    """Retrieve a list of notes from the 'notebook' collection."""
     note_list = []
     coll_ref = getReference("notebook")
     for doc in coll_ref.stream():
@@ -27,7 +31,9 @@ def listNotes():
 
     return note_list
 
+
 def randomMovie():
+    """Retrieve a random movie from the 'movies' collection."""
     movie_list = []
     coll_ref = getReference("movies")
     for doc in coll_ref.stream():
@@ -37,6 +43,7 @@ def randomMovie():
 
 
 def search(keyword):
+    """Search for movies in the 'movies' collection based on a keyword."""
     # Create a query against the collection reference.
     coll_ref = getReference("movies")
     query_ref = coll_ref.where("Series_Title_Index", "array_contains", keyword)
@@ -49,6 +56,7 @@ def search(keyword):
 
 
 def read(movie_name):
+    """Retrieve reviews for a specific movie from the 'movies_reviews' collection."""
     # Create a query against the collection reference.
     coll_ref = getReference("movies_reviews")
     collections = coll_ref.document(movie_name).collections()
@@ -56,11 +64,12 @@ def read(movie_name):
     for collection in collections:
         for doc in collection.stream():
             reviews_list.append(doc.to_dict())
-    print(reviews_list)
+
     return reviews_list
 
 
 def imdbTop3():
+    """Retrieve the top 3 movies from the 'movies' collection."""
     movie_list = []
     coll_ref = getReference("movies")
     for doc in coll_ref.stream():
@@ -70,6 +79,7 @@ def imdbTop3():
 
 
 def addToNote(data):
+    """Add a note to the 'notebook' collection."""
     myuuid = uuid.uuid4()
     myuuidStr = str(myuuid)
     coll_ref = getReference("notebook")
@@ -78,13 +88,10 @@ def addToNote(data):
 
 
 def addReview(data):
+    """Add a movie review to the 'movies_reviews' collection."""
     myuuid = uuid.uuid4()
     myuuidStr = str(myuuid)
-    coll_ref = getReference("movies_reviews").document(data['movie_name'])
-    doc_coll = coll_ref.collection(data['username'])
+    coll_ref = getReference("movies_reviews").document(data["movie_name"])
+    doc_coll = coll_ref.collection(data["username"])
     doc_ref = doc_coll.document(myuuidStr)
     doc_ref.set(data)
-
-
-# data = {'movie_reviews':'s','username':'username'}
-# addReview('The Shawshank Redemption',df,'ss')

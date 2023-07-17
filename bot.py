@@ -32,15 +32,13 @@ app = Flask(__name__)
 bot = Bot(token=os.environ["TOKEN"])
 
 
-# def echo(update: Update, context: CallbackContext) -> None :
-#     update.message.reply_text(update.message.text)
-
-
 def helpCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/help' command."""
     update.message.reply_text("Helping you helping you.")
 
 
 def searchCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/search' command."""
     keyword_list = context.args
     if len(keyword_list) != 0:
         for keyword in keyword_list:
@@ -60,17 +58,15 @@ def searchCommand(update: Update, context: CallbackContext) -> None:
 
 
 def readReviewsCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/read_reviews' command."""
     movie_name = context.args
     if len(movie_name) == 0:
         update.message.reply_text(
-            "Please input moive name! Usage: /read_reviews <moive name>"
+            "Please input movie name! Usage: /read_reviews <movie name>"
         )
     else:
         movie_name = " ".join(movie_name)
-        print(movie_name)
-        print(str(type(movie_name)) + "ssss" + movie_name)
         reviews_list = read(movie_name)
-        print(reviews_list)
         if len(reviews_list) != 0 and len(movie_name) != 0:
             for review in reviews_list:
                 (output, username) = reviewOutput(review)
@@ -86,6 +82,7 @@ def readReviewsCommand(update: Update, context: CallbackContext) -> None:
 
 
 def randomMovieCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/random_movie' command."""
     movie = randomMovie()
     (detail, image_link) = movieOutput(movie)
     update.message.bot.send_photo(
@@ -93,34 +90,22 @@ def randomMovieCommand(update: Update, context: CallbackContext) -> None:
     )
 
 
-#def imdbTop3Command(update: Update, context: CallbackContext) -> None:
-
-#    movie_list = imdbTop3()
-#    if len(movie_list) != 0:
-#        for movie in movie_list:
-#            (detail, image_link) = movieOutput(movie)
-#            update.message.bot.send_photo(
-#                chat_id=update.effective_chat.id, photo=image_link, caption=detail
-#            )
-#    else:
-#        update.message.reply_text("No results found!")
-
-
 def listNoteCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/list_note' command."""
     note_list = listNotes()
     for note in note_list:
         (detail, username) = noteOutput(note)
         update.message.reply_text(detail)
-        textToWav("en-GB-Neural2-B", detail, note['name'], username)
+        textToWav("en-GB-Neural2-B", detail, note["name"], username)
         update.message.bot.send_audio(
-                    chat_id=update.effective_chat.id,
-                    audio=open(f"{note['name']}_{username}.wav", "rb"),
-                )
+            chat_id=update.effective_chat.id,
+            audio=open(f"{note['name']}_{username}.wav", "rb"),
+        )
         os.remove(f"{note['name']}_{username}.wav")
 
 
-
 def startNote(update: Update, context: CallbackContext) -> None:
+    """Handler for starting the note conversation."""
     context.bot.send_message(
         chat_id=update.effective_chat.id, text="Hello! Please input the movie name:"
     )
@@ -128,6 +113,7 @@ def startNote(update: Update, context: CallbackContext) -> None:
 
 
 def receiveName(update: Update, context: CallbackContext) -> None:
+    """Handler for receiving the movie name in the note conversation."""
     name = update.message.text
     context.user_data["name"] = name
     context.bot.send_message(
@@ -137,6 +123,7 @@ def receiveName(update: Update, context: CallbackContext) -> None:
 
 
 def receiveGenre(update: Update, context: CallbackContext) -> None:
+    """Handler for receiving the genre in the note conversation."""
     genre = update.message.text
     context.user_data["genre"] = genre
     context.bot.send_message(
@@ -146,6 +133,7 @@ def receiveGenre(update: Update, context: CallbackContext) -> None:
 
 
 def receiveNote(update: Update, context: CallbackContext) -> None:
+    """Handler for receiving the note in the note conversation."""
     note = update.message.text
     context.user_data["note"] = note
     context.user_data["username"] = update.effective_user.username
@@ -163,6 +151,7 @@ def receiveNote(update: Update, context: CallbackContext) -> None:
 
 
 def writereviewCommand(update: Update, context: CallbackContext) -> None:
+    """Handler for the '/write_review' command."""
     context.bot.send_message(
         chat_id=update.effective_chat.id, text="Hello! Please input the movie name:"
     )
@@ -170,6 +159,7 @@ def writereviewCommand(update: Update, context: CallbackContext) -> None:
 
 
 def receiveMovieName(update: Update, context: CallbackContext) -> None:
+    """Handler for receiving the movie name in the review conversation."""
     name = update.message.text
     context.user_data["movie_name"] = name
     context.bot.send_message(
@@ -179,6 +169,7 @@ def receiveMovieName(update: Update, context: CallbackContext) -> None:
 
 
 def receiveReview(update: Update, context: CallbackContext) -> None:
+    """Handler for receiving the review in the review conversation."""
     movie_reviews = update.message.text
     context.user_data["movie_reviews"] = movie_reviews
     context.user_data["username"] = update.effective_user.username
@@ -195,6 +186,7 @@ def receiveReview(update: Update, context: CallbackContext) -> None:
 
 
 def cancel(update: Update, context: CallbackContext) -> None:
+    """Handler for canceling the conversation."""
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Sorry, something went wrong. Conversation canceled.",
@@ -223,14 +215,11 @@ review_conv_handler = ConversationHandler(
     fallbacks=[CommandHandler("cancel", cancel)],
 )
 
-
 dispatcher = Dispatcher(bot=bot, update_queue=None)
-# dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 dispatcher.add_handler(CommandHandler("help", helpCommand))
 dispatcher.add_handler(CommandHandler("random_movie", randomMovieCommand))
 dispatcher.add_handler(CommandHandler("search", searchCommand))
 dispatcher.add_handler(CommandHandler("read_reviews", readReviewsCommand))
-#dispatcher.add_handler(CommandHandler("imdb_top_3", imdbTop3Command))
 dispatcher.add_handler(CommandHandler("list_note", listNoteCommand))
 dispatcher.add_handler(conv_handler)
 dispatcher.add_handler(review_conv_handler)
@@ -238,6 +227,7 @@ dispatcher.add_handler(review_conv_handler)
 
 @app.post("/")
 def index() -> Response:
+    """Main endpoint for receiving updates from Telegram."""
     dispatcher.process_update(Update.de_json(request.get_json(force=True), bot))
 
     return "", http.HTTPStatus.NO_CONTENT
